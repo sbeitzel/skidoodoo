@@ -504,6 +504,15 @@ public class PerverseSudokuSolver
 		SudokuChecker sc = new SudokuChecker(board);
 		return sc.completed() && sc.checkPuzzle();
 	}
+
+    /**
+     * Accessor for the board, intended for use by testing fixtures
+     *
+     * @return the board
+     */
+	public int[][] getBoard() {
+	    return board;
+    }
 	
 	public void reset(int[][] board)
 	{
