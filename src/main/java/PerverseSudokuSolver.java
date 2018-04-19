@@ -602,5 +602,5 @@ public class PerverseSudokuSolver
 	ArrayList<Integer>[][] possible;
 	boolean[][] found;
 	boolean[][] foundDouble;
-	SudokuSolver sg;
+	SudokuGenerator sg;
 }
