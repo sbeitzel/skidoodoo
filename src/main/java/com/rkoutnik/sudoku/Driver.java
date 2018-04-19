@@ -1,3 +1,5 @@
+package com.rkoutnik.sudoku;
+
 /**
  *Runs through every other class.
  *Mainly used for testing.

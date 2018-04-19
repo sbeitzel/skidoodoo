@@ -1,3 +1,5 @@
+package com.rkoutnik.sudoku;
+
 import java.util.ArrayList;
 
 /*

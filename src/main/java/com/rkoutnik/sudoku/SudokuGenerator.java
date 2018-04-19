@@ -1,7 +1,9 @@
+package com.rkoutnik.sudoku;
+
 import java.util.Random;
 
 /**
- * The SudokuGenerator class creates a random standard (9x9)
+ * The com.rkoutnik.sudoku.SudokuGenerator class creates a random standard (9x9)
  * Sudoku board through the use of backtracking techniques.
  */
 public class SudokuGenerator {
@@ -16,7 +18,7 @@ public class SudokuGenerator {
     }
 
     /**
-     * Driver method for nextBoard.
+     * com.rkoutnik.sudoku.Driver method for nextBoard.
      *
      * @param difficulty the number of blank spaces to insert
      * @return board, a partially completed 9x9 Sudoku board
