@@ -11,12 +11,20 @@ import org.testng.annotations.Test;
 @Test(groups = {"all"})
 public class TestSolvers {
 
+    @Test
     public void testSKPerverse() {
-        Generator gen = new SKGeneratorAdapter();
-        Solver psolv = new SKSolverAdapter();
+        runPuzzles(new SKGeneratorAdapter(), new SKSolverAdapter());
+    }
+
+    @Test
+    public void testQBSolver() {
+        runPuzzles(new SKGeneratorAdapter(), new QBSolver());
+    }
+
+    private void runPuzzles(Generator gen, Solver solver) {
         for (Difficulty d : Difficulty.values()) {
             try {
-                psolv.getSolution(gen.generate(d));
+                solver.getSolution(gen.generate(d));
             } catch (NoSolutionFoundException nsfe) {
                 System.out.println("Unable to solve a puzzle of difficulty "+d);
             }
