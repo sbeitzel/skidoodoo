@@ -22,7 +22,7 @@ import java.util.Objects;
  */
 public class PerverseSudokuSolver {
     /**
-     * Calls the {@init link} function to reset the board
+     * Calls the {@link #init()} function to reset the board
      */
     public PerverseSudokuSolver() {
         sg = new SudokuGenerator();
@@ -75,7 +75,7 @@ public class PerverseSudokuSolver {
                         foundNum(i, j, board[i][j]);
                     } else if (possible[i][j].size() == 1) {
                         repeat = true;
-                        foundNum(i, j, possible[i][j].get(0));
+                        foundNum(i, j, possible[i][j].get(0).intValue());
                     }
                 }
             }
@@ -99,20 +99,20 @@ public class PerverseSudokuSolver {
             singletons.clear();
             for (int j = 0; j < 9; j++) {
                 for (int k = 0; k < possible[i][j].size(); k++) {
-                    values[possible[i][j].get(k)]++;
+                    values[possible[i][j].get(k).intValue()]++;
                 }
             }
 
             for (int j = 1; j < 10; j++) {
                 if (values[j] == 1) {
-                    singletons.add(j);
+                    singletons.add(Integer.valueOf(j));
                 }
             }
 
             for (int j = 0; j < 9; j++) {
-                for (int k = 0; k < singletons.size(); k++) {
-                    if (possible[i][j].contains(singletons.get(k)) && !found[i][j]) {
-                        foundNum(i, j, singletons.get(k));
+                for (Integer singleton : singletons) {
+                    if (possible[i][j].contains(singleton) && !found[i][j]) {
+                        foundNum(i, j, singleton.intValue());
                         repeat = true;
                     }
                 }
@@ -124,18 +124,18 @@ public class PerverseSudokuSolver {
             singletons.clear();
             for (int j = 0; j < 9; j++) {
                 for (int k = 0; k < possible[j][i].size(); k++) {
-                    values[possible[j][i].get(k)]++;
+                    values[possible[j][i].get(k).intValue()]++;
                 }
             }
             for (int j = 1; j < 10; j++) {
                 if (values[j] == 1) {
-                    singletons.add(j);
+                    singletons.add(Integer.valueOf(j));
                 }
             }
             for (int j = 0; j < 9; j++) {
-                for (int k = 0; k < singletons.size(); k++) {
-                    if (possible[j][i].contains(singletons.get(k)) && !found[j][i]) {
-                        foundNum(j, i, singletons.get(k));
+                for (Integer singleton : singletons) {
+                    if (possible[j][i].contains(singleton) && !found[j][i]) {
+                        foundNum(j, i, singleton.intValue());
                         repeat = true;
                     }
                 }
@@ -150,18 +150,18 @@ public class PerverseSudokuSolver {
                     singletons.clear();
                     for (int j = corners[l]; j < corners[l] + 3; j++) {
                         for (int k = 0; k < possible[i][j].size(); k++) {
-                            values[possible[i][j].get(k)]++;
+                            values[possible[i][j].get(k).intValue()]++;
                         }
                     }
                     for (int j = 1; j < 10; j++) {
                         if (values[j] == 1) {
-                            singletons.add(j);
+                            singletons.add(Integer.valueOf(j));
                         }
                     }
                     for (int j = 0; j < 9; j++) {
-                        for (int k = 0; k < singletons.size(); k++) {
-                            if (possible[i][j].contains(singletons.get(k)) && !found[i][j]) {
-                                foundNum(i, j, singletons.get(k));
+                        for (Integer singleton : singletons) {
+                            if (possible[i][j].contains(singleton) && !found[i][j]) {
+                                foundNum(i, j, singleton.intValue());
                                 repeat = true;
                             }
                         }
@@ -186,25 +186,26 @@ public class PerverseSudokuSolver {
             possDoubs.clear();
             for (int j = 0; j < 9; j++) {
                 if (possible[i][j].size() == 2 && !foundDouble[i][j]) {
-                    possDoubs.add(j);
+                    possDoubs.add(Integer.valueOf(j));
                 }
             }
             for (int j = 0; j < possDoubs.size() - 1; j++) {
                 for (int k = j + 1; k < possDoubs.size(); k++) {
-                    if (possible[i][possDoubs.get(j)].equals(possible[i][possDoubs.get(k)])) {
-                        foundDouble[i][possDoubs.get(j)] = true;
-                        foundDouble[i][possDoubs.get(k)] = true;
-                        int zero = possible[i][possDoubs.get(j)].get(0);
-                        int one = possible[i][possDoubs.get(j)].get(1);
+                    if (possible[i][possDoubs.get(j).intValue()].equals(possible[i][possDoubs.get(k).intValue()])) {
+                        foundDouble[i][possDoubs.get(j).intValue()] = true;
+                        foundDouble[i][possDoubs.get(k).intValue()] = true;
+                        int zero = possible[i][possDoubs.get(j).intValue()].get(0).intValue();
+                        int one = possible[i][possDoubs.get(j).intValue()].get(1).intValue();
                         for (int q = 0; q < 9; q++) {
-                            if (q == possDoubs.get(j) || q == possDoubs.get(k)) {
+                            if (q == possDoubs.get(j).intValue() || q == possDoubs.get(k).intValue()) {
                                 continue;
                             } else {
-                                if (possible[i][q].indexOf(zero) != -1) {
-                                    possible[i][q].remove(possible[i][q].indexOf(zero));
+                                // TODO next pass, this can be simplified as well
+                                if (possible[i][q].indexOf(Integer.valueOf(zero)) != -1) {
+                                    possible[i][q].remove(Integer.valueOf(zero));
                                 }
-                                if (possible[i][q].indexOf(one) != -1) {
-                                    possible[i][q].remove(possible[i][q].indexOf(one));
+                                if (possible[i][q].indexOf(Integer.valueOf(one)) != -1) {
+                                    possible[i][q].remove(Integer.valueOf(one));
                                 }
                             }
                         }
@@ -218,30 +219,31 @@ public class PerverseSudokuSolver {
             possDoubs.clear();
             for (int j = 0; j < 9; j++) {
                 if (possible[j][i].size() == 2 && !foundDouble[j][i]) {
-                    possDoubs.add(j);
+                    possDoubs.add(Integer.valueOf(j));
                 }
             }
 
             for (int j = 0; j < possDoubs.size() - 1; j++) {
                 for (int k = j + 1; k < possDoubs.size(); k++) {
-                    if (possible[possDoubs.get(j)][i].equals(possible[possDoubs.get(k)][i])) {
-                        foundDouble[possDoubs.get(j)][i] = true;
-                        foundDouble[possDoubs.get(k)][i] = true;
-                        if (possible[possDoubs.get(j)][i].size() == 1) {
+                    if (possible[possDoubs.get(j).intValue()][i].equals(possible[possDoubs.get(k).intValue()][i])) {
+                        foundDouble[possDoubs.get(j).intValue()][i] = true;
+                        foundDouble[possDoubs.get(k).intValue()][i] = true;
+                        if (possible[possDoubs.get(j).intValue()][i].size() == 1) {
                             print();
                             System.out.println(j + " " + k);
                         }
-                        int zero = possible[possDoubs.get(j)][i].get(0);
-                        int one = possible[possDoubs.get(j)][i].get(1);
+                        int zero = possible[possDoubs.get(j).intValue()][i].get(0).intValue();
+                        int one = possible[possDoubs.get(j).intValue()][i].get(1).intValue();
                         for (int q = 0; q < 9; q++) {
-                            if (q == possDoubs.get(j) || q == possDoubs.get(k)) {
+                            if (q == possDoubs.get(j).intValue() || q == possDoubs.get(k).intValue()) {
                                 continue;
                             } else {
-                                if (possible[q][i].indexOf(zero) != -1) {
-                                    possible[q][i].remove(possible[q][i].indexOf(zero));
+                                // TODO next pass, simplify this
+                                if (possible[q][i].indexOf(Integer.valueOf(zero)) != -1) {
+                                    possible[q][i].remove(Integer.valueOf(zero));
                                 }
-                                if (possible[q][i].indexOf(one) != -1) {
-                                    possible[q][i].remove(possible[q][i].indexOf(one));
+                                if (possible[q][i].indexOf(Integer.valueOf(one)) != -1) {
+                                    possible[q][i].remove(Integer.valueOf(one));
                                 }
                             }
                         }
@@ -258,31 +260,32 @@ public class PerverseSudokuSolver {
                     possDoubs.clear();
                     for (int j = corners[l]; j < corners[l] + 3; j++) {
                         if (possible[i][j].size() == 2 && !foundDouble[i][j]) {
-                            possDoubs.add(i);
-                            possDoubs.add(j);
+                            possDoubs.add(Integer.valueOf(i));
+                            possDoubs.add(Integer.valueOf(j));
                         }
                     }
                     for (int j = 0; j < possDoubs.size() - 1; j += 2) {
                         for (int k = j + 2; k < possDoubs.size(); k += 2) {
-                            if (possible[possDoubs.get(j)][possDoubs.get(j + 1)]
-                                    .equals(possible[possDoubs.get(k)][possDoubs.get(k + 1)])) {
-                                foundDouble[possDoubs.get(j)][possDoubs.get(j + 1)] = true;
-                                foundDouble[possDoubs.get(k)][possDoubs.get(k + 1)] = true;
-                                int zero = possible[possDoubs.get(j)][possDoubs.get(j + 1)].get(0);
-                                int one = possible[possDoubs.get(j)][possDoubs.get(j + 1)].get(1);
+                            if (possible[possDoubs.get(j).intValue()][possDoubs.get(j + 1).intValue()]
+                                    .equals(possible[possDoubs.get(k).intValue()][possDoubs.get(k + 1).intValue()])) {
+                                foundDouble[possDoubs.get(j).intValue()][possDoubs.get(j + 1).intValue()] = true;
+                                foundDouble[possDoubs.get(k).intValue()][possDoubs.get(k + 1).intValue()] = true;
+                                int zero = possible[possDoubs.get(j).intValue()][possDoubs.get(j + 1).intValue()].get(0).intValue();
+                                int one = possible[possDoubs.get(j).intValue()][possDoubs.get(j + 1).intValue()].get(1).intValue();
                                 for (int q = corners[a]; q < corners[a] + 3; q++) {
                                     for (int r = corners[l]; r < corners[l] + 3; r++) {
-                                        if (q == possDoubs.get(j) && r == possDoubs.get(j + 1)) {
+                                        if (q == possDoubs.get(j).intValue() && r == possDoubs.get(j + 1).intValue()) {
                                             continue;
                                         }
-                                        if (q == possDoubs.get(k) && r == possDoubs.get(k + 1)) {
+                                        if (q == possDoubs.get(k).intValue() && r == possDoubs.get(k + 1).intValue()) {
                                             continue;
                                         } else {
-                                            if (possible[i][q].indexOf(zero) != -1) {
-                                                possible[i][q].remove(possible[i][q].indexOf(zero));
+                                            // TODO next pass, simplify
+                                            if (possible[i][q].indexOf(Integer.valueOf(zero)) != -1) {
+                                                possible[i][q].remove(Integer.valueOf(zero));
                                             }
-                                            if (possible[i][q].indexOf(one) != -1) {
-                                                possible[i][q].remove(possible[i][q].indexOf(one));
+                                            if (possible[i][q].indexOf(Integer.valueOf(one)) != -1) {
+                                                possible[i][q].remove(Integer.valueOf(one));
                                             }
                                         }
                                     }
@@ -419,10 +422,10 @@ public class PerverseSudokuSolver {
 
     private ArrayList<Integer> inCommon(ArrayList<Integer> one, ArrayList<Integer> two) {
         ArrayList<Integer> common = new ArrayList<Integer>();
-        for (int i = 0; i < one.size(); i++) {
-            for (int j = 0; j < two.size(); j++) {
-                if (one.get(i) == two.get(j)) {
-                    common.add(one.get(i));
+        for (Integer anOne : one) {
+            for (Integer aTwo : two) {
+                if (anOne.equals(aTwo)) {
+                    common.add(anOne);
                 }
             }
         }
@@ -433,15 +436,15 @@ public class PerverseSudokuSolver {
         ArrayList<PerverseSudokuSolver> solved = new ArrayList<PerverseSudokuSolver>();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                if (board[i][j] == 0 && possible[i][j].size() > 0) {
+                if (board[i][j] == 0 && !possible[i][j].isEmpty()) {
                     for (int k = 0; k < possible[i][j].size(); k++) {
                         PerverseSudokuSolver guess = new PerverseSudokuSolver();
                         //Something interesting happened here.  I gave it this board, but reset possible
                         //It came up with a different answer.  I should follow this up sometime.
                         guess.board = this.board;
                         guess.possible = this.possible;
-                        guess.foundNum(i, j, possible[i][j].get(k));
-                        if (guess.solve() && solved.size() > 0) {
+                        guess.foundNum(i, j, possible[i][j].get(k).intValue());
+                        if (guess.solve() && !solved.isEmpty()) {
                             boolean notIncluded = true;
                             for (int l = 0; l < solved.size(); l++) {
                                 if (solved.get(k).equals(guess)) {
@@ -464,7 +467,7 @@ public class PerverseSudokuSolver {
 			throw new RuntimeException("Board contiains multiple solutions");
 			*/
         }
-        if (solved.size() > 0) {
+        if (!solved.isEmpty()) {
             this.board = solved.get(0).board;
         }
     }
@@ -477,20 +480,20 @@ public class PerverseSudokuSolver {
 
         board[x][y] = numFound;
         possible[x][y].clear();
-        possible[x][y].add(numFound);
+        possible[x][y].add(Integer.valueOf(numFound));
         found[x][y] = true;
 
         for (int i = 0; i < 9; i++) {
             if (i != x) {
-                if (possible[i][y].indexOf(numFound) != -1) {
-                    possible[i][y].remove(possible[i][y].indexOf(numFound));
+                if (possible[i][y].indexOf(Integer.valueOf(numFound)) != -1) {
+                    possible[i][y].remove(Integer.valueOf(numFound));
                 }
             }
         }
         for (int i = 0; i < 9; i++) {
             if (i != y) {
-                if (possible[x][i].indexOf(numFound) != -1) {
-                    possible[x][i].remove(possible[x][i].indexOf(numFound));
+                if (possible[x][i].indexOf(Integer.valueOf(numFound)) != -1) {
+                    possible[x][i].remove(Integer.valueOf(numFound));
                 }
             }
         }
@@ -513,8 +516,8 @@ public class PerverseSudokuSolver {
         for (int i = cornerX; i < 10 && i < cornerX + 3; i++) {
             for (int j = cornerY; j < 10 && j < cornerY + 3; j++) {
                 if (i != x && j != y) {
-                    if (possible[i][j].indexOf(numFound) != -1) {
-                        possible[i][j].remove(possible[i][j].indexOf(numFound));
+                    if (possible[i][j].indexOf(Integer.valueOf(numFound)) != -1) {
+                        possible[i][j].remove(Integer.valueOf(numFound));
                     }
                 }
             }
@@ -551,7 +554,7 @@ public class PerverseSudokuSolver {
             for (int j = 0; j < 9; j++) {
                 possible[i][j] = new ArrayList<Integer>();
                 for (int k = 1; k < 10; k++) {
-                    possible[i][j].add(k);
+                    possible[i][j].add(Integer.valueOf(k));
                 }
             }
         }
@@ -603,7 +606,7 @@ public class PerverseSudokuSolver {
      * equals
      * compares the boards of two solvers
      *
-     * @return: 0 if the boards are different, 1 otherwise
+     * @return 0 if the boards are different, 1 otherwise
      */
     @Override
     public boolean equals(Object other) {
