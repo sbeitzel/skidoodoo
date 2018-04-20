@@ -18,7 +18,7 @@ import org.testng.annotations.Test;
 @Test(groups = {"all"})
 public class TestGenerators {
 
-    @Test
+    @Test(groups = {"rkoutnik"})
     public void testSKGenerator() {
         Generator skgen = new SKGeneratorAdapter();
         int[][] puzzle = skgen.generate(Difficulty.SOLVED);
