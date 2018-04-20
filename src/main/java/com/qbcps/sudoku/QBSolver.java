@@ -159,13 +159,22 @@ public class QBSolver implements Solver {
                         try {
                             // duplicate the board
                             Board b2 = new Board(b);
-                            __l.debug(indent + "[" + c.getRow() + ", " + c.getCol() + "] = " + v + "?");
-                            b2.getCell(c.getRow(), c.getCol()).setValue(v.intValue());
+                            __l.debug(indent + "[" + row + ", " + col + "] = " + v + "?");
+                            b2.getCell(row, col).setValue(v.intValue());
                             return solve(b2, guessNumber);
                         } catch (Exception e) {
                             __l.debug(indent + "[" + c.getRow() + ", " + c.getCol() + "] != " + v);
                             // here's an experiment. If we know that assigning value v to cell c doesn't work, then
                             // let's make a copy of Board b and remove v from c-prime's list of possibilities.
+                            try {
+                                Board bPrime = new Board(b);
+                                Cell cPrime = bPrime.getCell(row, col);
+                                cPrime.removePossibility(v.intValue());
+                                b = bPrime;
+                            } catch (IllegalArgumentException iae) {
+                                // well, *that* is a bit of a surprise
+                                __l.warn("Exception removing demonstrated bad value", iae);
+                            }
                         }
                     }
                 }

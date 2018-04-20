@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 @Test(groups = {"all"})
 public class TestSolvers {
 
-    @Test(dataProvider = "generators", dataProviderClass = DataProviders.class)
+    @Test(dataProvider = "generators", dataProviderClass = DataProviders.class, enabled = false)
     public void testSKPerverse(String generatorName, Generator generator, String difficulty) {
         Solver solver = new SKSolverAdapter();
         System.out.println("testing rkoutnik solver against "+generatorName);
