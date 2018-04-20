@@ -82,7 +82,7 @@ public class QBSolver implements Solver {
         }
     }
 
-    public boolean findDoubles(Board b) {
+    private boolean findDoubles(Board b) {
         boolean modified = false;
         for (CellGroup g : b.getGroups()) {
             List<Cell> cells = g.getCells();
@@ -102,7 +102,7 @@ public class QBSolver implements Solver {
         return modified;
     }
 
-    public boolean fillInSingles(Board b) {
+    private boolean fillInSingles(Board b) {
         boolean found = false;
         for (Cell c : b) {
             if (c.getPossibles().size() == 1) {
@@ -121,7 +121,7 @@ public class QBSolver implements Solver {
      * @param b the board to examine
      * @return <code>true</code> if any cells were modified.
      */
-    public boolean fillInSingleInGroup(Board b) {
+    private boolean fillInSingleInGroup(Board b) {
         boolean found = false;
         for (CellGroup group : b.getGroups()) {
             Map<Integer, List<Cell>> valueMap = new HashMap<>();
@@ -143,7 +143,7 @@ public class QBSolver implements Solver {
         return found;
     }
 
-    public int[][] guess(Board b, int guessNumber) {
+    private int[][] guess(Board b, int guessNumber) {
         StringBuilder sb = new StringBuilder();
         for (int i=0; i<guessNumber; i++) {
             sb.append(" ");
