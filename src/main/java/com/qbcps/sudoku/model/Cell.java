@@ -20,7 +20,7 @@ public class Cell {
     private final int _row;
     private final int _col;
 
-    Cell(int row, int col) {
+    public Cell(int row, int col) {
         for (int i = 1; i < 10; i++) {
             _possibles.add(Integer.valueOf(i));
         }

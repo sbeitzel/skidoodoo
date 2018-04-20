@@ -21,7 +21,7 @@ public class Board implements Iterable<Cell> {
     private CellGroup[] _colGroups;
     private CellGroup[] _squareGroups;
 
-    Board(int[][] puzzle) {
+    public Board(int[][] puzzle) {
         initStructures();
         // now that we have all the cells created, we can populate them
         for (int row = 0; row < 9; row++) {
@@ -34,7 +34,7 @@ public class Board implements Iterable<Cell> {
     }
 
     @SuppressWarnings("CopyConstructorMissesField")
-    Board(Board original) {
+    public Board(Board original) {
         initStructures();
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
