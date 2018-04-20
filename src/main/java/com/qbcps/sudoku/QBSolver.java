@@ -5,7 +5,9 @@ package com.qbcps.sudoku;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.rkoutnik.sudoku.SudokuChecker;
 import org.slf4j.Logger;
@@ -23,7 +25,7 @@ public class QBSolver implements Solver {
     public int[][] getSolution(int[][] puzzle) throws NoSolutionFoundException {
         try {
             Board b = new Board(puzzle);
-            return solve(b);
+            return solve(b, 0);
         } catch (NoSolutionFoundException nsfe) {
             __l.debug("Board failed with state:\n"+Board.render(nsfe.getPuzzle()), nsfe);
             throw nsfe;
@@ -33,94 +35,142 @@ public class QBSolver implements Solver {
         }
     }
 
-    private int[][] solve(Board b) throws NoSolutionFoundException {
-        // this is a single pass at collapsing possibilities.
-        // 1. any cell with a single possibility should be set
-        boolean valueFound, workDone = true;
-        int loopCount = 1;
+    private int[][] solve(Board b, int guessNumber) throws NoSolutionFoundException {
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<guessNumber; i++) {
+            sb.append(" ");
+        }
+        String indent = sb.toString();
         while (true) {
-            __l.debug("Starting loop "+(loopCount++));
-            workDone = false;
-            int singles = 0;
-            do {
-                valueFound = false;
-                for (Cell c : b) {
-                    if (c.getPossibles().size() == 1) {
-                        valueFound = true;
-                        c.setValue(c.getPossibles().get(0).intValue());
-                        singles++;
-                    }
-                }
-            } while (valueFound);
-            __l.debug("Found "+singles+" cells with only a single possibility");
-            // do an integrity check of the board
+            // this check is because I don't yet trust my data structure wiring
             b.integrityCheck();
 
-            // at this point, we have no unset cells with only one possibility.
-            // 2a. check to see if we've solved it
+            // check to see if we've solved it. Lazy is good!
             int[][] state = b.getBoard();
             SudokuChecker checker = new SudokuChecker(state);
             if (checker.completed()) {
-                __l.debug("Puzzle completed");
+                __l.debug(indent+"Puzzle completed");
                 if (checker.checkPuzzle()) {
-                    __l.debug("Puzzle solved");
+                    __l.debug(indent+"Puzzle solved");
                     return state;
                 }
-                __l.debug("Invalid solution");
+                __l.debug(indent+"Invalid solution");
                 // we've got a number in every square but it isn't a valid solution
                 throw new NoSolutionFoundException(state);
             }
-            __l.debug("Not yet completed");
-            // 2b. look for doubles, where cell1 and cell2 in a group only have the same two possibilities. In which case, remove those possibilities from the rest of the group's cells
-            for (CellGroup g : b.getGroups()) {
-                List<Cell> cells = g.getCells();
-                for (int p1 = 0; p1 < 8; p1++) {
-                    Cell first = cells.get(p1);
-                    if (first.getPossibles().size() == 2) {
-                        for (int p2 = p1+1; p2 < 9; p2++) {
-                            Cell second = cells.get(p2);
-                            if (second.getPossibles().size() == 2 && second.getPossibles().containsAll(first.getPossibles())) {
-                                // we know that the other cells in the group can't have these possibilities
-                                workDone = g.removePossibilities(Arrays.asList(first, second), first.getPossibles()) || workDone;
-                            }
+
+            // look for cells with only one possibility
+            if (fillInSingles(b)) {
+                continue;
+            }
+
+            // look for possibilities with only one cell
+            if (fillInSingleInGroup(b)) {
+                continue;
+            }
+
+            // look for doubles, where cell1 and cell2 in a group only have the same two possibilities. In which case, remove those possibilities from the rest of the group's cells
+            if (findDoubles(b)) {
+                continue;
+            }
+
+            // finally we need to guess. This is where recursion/backtracking happens.
+            return guess(b, guessNumber+1);
+        }
+    }
+
+    public boolean findDoubles(Board b) {
+        boolean modified = false;
+        for (CellGroup g : b.getGroups()) {
+            List<Cell> cells = g.getCells();
+            for (int p1 = 0; p1 < 8; p1++) {
+                Cell first = cells.get(p1);
+                if (first.getPossibles().size() == 2) {
+                    for (int p2 = p1+1; p2 < 9; p2++) {
+                        Cell second = cells.get(p2);
+                        if (second.getPossibles().size() == 2 && second.getPossibles().containsAll(first.getPossibles())) {
+                            // we know that the other cells in the group can't have these possibilities
+                            modified = g.removePossibilities(Arrays.asList(first, second), first.getPossibles()) || modified;
                         }
                     }
                 }
             }
-            // 3. if no work was done, then we need to guess. This is where recursion/backtracking happens.
-            // if work was done, we should loop back up to the top
-            if (!workDone) {
-                __l.debug("Welp, we need to guess");
-                return guess(b);
-            }
         }
+        return modified;
     }
 
-    private int[][] guess(Board b) {
-        __l.debug("Starting a guess");
+    public boolean fillInSingles(Board b) {
+        boolean found = false;
         for (Cell c : b) {
-            // find a cell with possibilities
-            if (c.getPossibles().size()>1) {
-                __l.debug("Found a cell with multiple possibilities at row "+c.getRow()+", column "+c.getCol());
-                ArrayList<Integer> workingList = new ArrayList<>(c.getPossibles());
-                for (Integer v : workingList) {
-                    // pick one of the possible values
-                    Board b2 = new Board(b);
-                    b2.getCell(c.getRow(), c.getCol()).setValue(v.intValue());
-                    // try to solve the new board
-                    try {
-                        // if we get a solution, great, return it
-                        __l.debug("Guessing value "+v);
-                        return solve(b2);
-                    } catch (NoSolutionFoundException nsfe) {
-                        // if we can't solve the board that way, then remove that possibility from the cell and try the next value
-                        c.removePossibility(v.intValue());
+            if (c.getPossibles().size() == 1) {
+                found = true;
+                c.setValue(c.getPossibles().get(0).intValue());
+            }
+        }
+        return found;
+    }
+
+    /**
+     * If there is only one cell within a group which can possibly hold a given value,
+     * then that's where that value belongs, even if there are other possible values still
+     * for that cell.
+     *
+     * @param b the board to examine
+     * @return <code>true</code> if any cells were modified.
+     */
+    public boolean fillInSingleInGroup(Board b) {
+        boolean found = false;
+        for (CellGroup group : b.getGroups()) {
+            Map<Integer, List<Cell>> valueMap = new HashMap<>();
+            for (Cell c : group.getCells()) {
+                for (Integer possible : c.getPossibles()) {
+                    List<Cell> cells = valueMap.computeIfAbsent(possible, k -> new ArrayList<>());
+                    cells.add(c);
+                }
+            }
+            for (Map.Entry<Integer, List<Cell>> entry : valueMap.entrySet()) {
+                if (entry.getValue().size() == 1) {
+                    // there is only one cell which can be set to the key
+                    Cell c = entry.getValue().get(0);
+                    c.setValue(entry.getKey().intValue());
+                    found = true;
+                }
+            }
+        }
+        return found;
+    }
+
+    public int[][] guess(Board b, int guessNumber) {
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<guessNumber; i++) {
+            sb.append(" ");
+        }
+        String indent = sb.toString();
+
+        __l.debug(indent+"g: "+guessNumber);
+        // for each available cell in b
+        for (int row=0; row<9; row++) {
+            for (int col=0; col<9; col++) {
+                Cell c = b.getCell(row, col);
+                if (!c.getPossibles().isEmpty()) {
+                    // here's a guess
+                    List<Integer> possibles = c.getPossibles();
+                    for (Integer v : possibles) {
+                        try {
+                            // duplicate the board
+                            Board b2 = new Board(b);
+                            __l.debug(indent + "[" + c.getRow() + ", " + c.getCol() + "] = " + v + "?");
+                            b2.getCell(c.getRow(), c.getCol()).setValue(v.intValue());
+                            return solve(b2, guessNumber);
+                        } catch (Exception e) {
+                            __l.debug(indent + "[" + c.getRow() + ", " + c.getCol() + "] != " + v);
+                            // here's an experiment. If we know that assigning value v to cell c doesn't work, then
+                            // let's make a copy of Board b and remove v from c-prime's list of possibilities.
+                        }
                     }
                 }
             }
         }
-        // if we have tried all the possible values for the remaining cells and we still can't find a solution, give up.
-        throw new NoSolutionFoundException(b.getBoard());
+        throw new NoSolutionFoundException(b.getBoard(), "Couldn't find the solution by guessing; we give up", null);
     }
-
 }

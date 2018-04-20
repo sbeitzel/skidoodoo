@@ -191,4 +191,24 @@ public class Board implements Iterable<Cell> {
         sb.append("\n");
         return sb.toString();
     }
+
+    public static String renderArray(int[][] puzzle) {
+        StringBuilder sb = new StringBuilder("{");
+        for (int i=0; i<9; i++) {
+            sb.append("{");
+            for (int j=0; j<9; j++) {
+                sb.append(puzzle[i][j]);
+                if (j < 8) {
+                    sb.append(",");
+                }
+            }
+            sb.append("}");
+            if (i<8) {
+                sb.append(",");
+            }
+            sb.append("\n");
+        }
+        sb.append("}");
+        return sb.toString();
+    }
 }
