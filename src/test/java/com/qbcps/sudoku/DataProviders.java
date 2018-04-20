@@ -4,6 +4,10 @@ package com.qbcps.sudoku;
  */
 
 import com.mccalv.SGAdapter;
+import com.qbcps.sudoku.model.Board;
+import com.qbcps.sudoku.model.QBSolver;
+import com.qbcps.sudoku.model.SKGeneratorAdapter;
+import com.qbcps.sudoku.model.SKSolverAdapter;
 import org.testng.annotations.DataProvider;
 
 /**
@@ -41,15 +45,15 @@ public class DataProviders {
     @DataProvider(name = "boards")
     public static Object[][] getBoards() {
         return new Object[][] {
-                {"EASY", new Board(new int[][]{{4,0,6,0,1,2,0,0,5},
-                {3,0,0,4,7,9,0,0,6},
-                {1,8,9,0,3,5,0,4,2},
-                {0,0,3,0,5,1,0,0,7},
-                {7,2,0,0,0,8,0,0,4},
-                {0,6,0,0,2,4,0,3,1},
-                {6,9,0,0,4,7,0,2,3},
-                {2,0,0,5,8,0,4,0,9},
-                {0,0,4,2,9,0,6,0,8}
+                {"EASY", new Board(new int[][]{{4, 0, 6, 0, 1, 2, 0, 0, 5},
+                                               {3,0,0,4,7,9,0,0,6},
+                                               {1,8,9,0,3,5,0,4,2},
+                                               {0,0,3,0,5,1,0,0,7},
+                                               {7,2,0,0,0,8,0,0,4},
+                                               {0,6,0,0,2,4,0,3,1},
+                                               {6,9,0,0,4,7,0,2,3},
+                                               {2,0,0,5,8,0,4,0,9},
+                                               {0,0,4,2,9,0,6,0,8}
                 })},
                 {"MEDIUM", new Board(new int[][]{{8,0,0,5,0,0,0,9,2},
                 {0,2,5,0,0,6,0,0,0},

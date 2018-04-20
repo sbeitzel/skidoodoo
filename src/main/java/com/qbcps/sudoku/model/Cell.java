@@ -1,4 +1,4 @@
-package com.qbcps.sudoku;
+package com.qbcps.sudoku.model;
 /*
  * Copyright 4/19/18 by Stephen Beitzel
  */
