@@ -2,6 +2,8 @@ package com.rkoutnik.sudoku;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 /*
@@ -83,6 +85,62 @@ public class PerverseSudokuSolver {
         return repeat;
     }
 
+    private void singletonSliceIterate(int row, int col, int[] values) {
+        for (int k=0; k<possible[row][col].size(); k++) {
+            values[possible[row][col].get(k).intValue()]++;
+        }
+    }
+
+    private boolean markFoundInSlice(boolean didWork, int row, int col, Collection<Integer> singletons) {
+        for (Integer singleton : singletons) {
+            if (possible[row][col].contains(singleton) && !found[row][col]) {
+                foundNum(row, col, singleton.intValue());
+                didWork = true;
+            }
+        }
+        return didWork;
+    }
+
+    /**
+     * Given a single row (or column), look for cells with only one possible value.
+     *
+     * @param didWork has any work already been done in the current iteration context
+     * @param singletons collection to hold all the singletons found
+     * @param values some kind of storage
+     * @param sliceIndex row (or column) index
+     * @param isRow if <code>true</code>, the slice is a row; otherwise, it's a column
+     * @return <code>true</code> if we've found any singles in this pass || didWork was already true
+     */
+    private boolean findSingletonBySlice(boolean didWork, List<Integer> singletons, int[] values, int sliceIndex, boolean isRow) {
+        if (isRow) {
+            for (int col=0; col<9; col++) {
+                singletonSliceIterate(sliceIndex, col, values);
+            }
+        } else {
+            for (int row=0; row<9; row++) {
+                singletonSliceIterate(row, sliceIndex, values);
+            }
+        }
+
+        for (int j = 1; j < 10; j++) {
+            if (values[j] == 1) {
+                singletons.add(Integer.valueOf(j));
+            }
+        }
+
+        if (isRow) {
+            for (int col=0; col<9; col++) {
+                didWork = markFoundInSlice(didWork, sliceIndex, col, singletons);
+            }
+        } else {
+            for (int row=0; row<9; row++) {
+                didWork = markFoundInSlice(didWork, row, sliceIndex, singletons);
+            }
+        }
+
+        return didWork;
+    }
+
     /**
      * Iterates through r/c/s, attempting to find an instance where
      * a number appears only once in possible.
@@ -97,49 +155,13 @@ public class PerverseSudokuSolver {
         for (int i = 0; i < 9; i++) {
             values = new int[10];
             singletons.clear();
-            for (int j = 0; j < 9; j++) {
-                for (int k = 0; k < possible[i][j].size(); k++) {
-                    values[possible[i][j].get(k).intValue()]++;
-                }
-            }
-
-            for (int j = 1; j < 10; j++) {
-                if (values[j] == 1) {
-                    singletons.add(Integer.valueOf(j));
-                }
-            }
-
-            for (int j = 0; j < 9; j++) {
-                for (Integer singleton : singletons) {
-                    if (possible[i][j].contains(singleton) && !found[i][j]) {
-                        foundNum(i, j, singleton.intValue());
-                        repeat = true;
-                    }
-                }
-            }
+            repeat = findSingletonBySlice(repeat, singletons, values, i, true);
         }
 
         for (int i = 0; i < 9; i++) {
             values = new int[10];
             singletons.clear();
-            for (int j = 0; j < 9; j++) {
-                for (int k = 0; k < possible[j][i].size(); k++) {
-                    values[possible[j][i].get(k).intValue()]++;
-                }
-            }
-            for (int j = 1; j < 10; j++) {
-                if (values[j] == 1) {
-                    singletons.add(Integer.valueOf(j));
-                }
-            }
-            for (int j = 0; j < 9; j++) {
-                for (Integer singleton : singletons) {
-                    if (possible[j][i].contains(singleton) && !found[j][i]) {
-                        foundNum(j, i, singleton.intValue());
-                        repeat = true;
-                    }
-                }
-            }
+            repeat = findSingletonBySlice(repeat, singletons, values, i, false);
         }
 
         int[] corners = {0, 3, 6};

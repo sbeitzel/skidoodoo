@@ -51,7 +51,7 @@ public class QBSolver implements Solver {
             if (checker.completed()) {
                 __l.debug(indent+"Puzzle completed");
                 if (checker.checkPuzzle()) {
-                    __l.debug(indent+"Puzzle solved");
+                    __l.debug(indent+"Puzzle solved with "+guessNumber+" guesses.");
                     return state;
                 }
                 __l.debug(indent+"Invalid solution");
@@ -69,7 +69,10 @@ public class QBSolver implements Solver {
                 continue;
             }
 
-            // look for doubles, where cell1 and cell2 in a group only have the same two possibilities. In which case, remove those possibilities from the rest of the group's cells
+            // look for doubles, where cell1 and cell2 in a group only have the same two possibilities.
+            // In which case, remove those possibilities from the rest of the group's cells.
+            // This doesn't set a value but it limits the scope for guessing and can cut down the time to find
+            // a solution pretty dramatically.
             if (findDoubles(b)) {
                 continue;
             }
