@@ -33,7 +33,7 @@ public class TestGenerators {
         Assert.assertTrue(checker.checkPuzzle(), "The generator created an invalid puzzle!");
     }
 
-    @Test(dataProviderClass = DataProviders.class, dataProvider = "generators")
+    @Test(dataProviderClass = DataProviders.class, dataProvider = "generators", enabled = false)
     public void testCreateBoards(String gName, Generator gen, String difficulty) {
         Difficulty d = Difficulty.fromString(difficulty);
         int[][] board = gen.generate(d);

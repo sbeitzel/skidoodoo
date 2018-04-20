@@ -36,11 +36,6 @@ public class QBSolver implements Solver {
     }
 
     private int[][] solve(Board b, int guessNumber) throws NoSolutionFoundException {
-        StringBuilder sb = new StringBuilder();
-        for (int i=0; i<guessNumber; i++) {
-            sb.append(" ");
-        }
-        String indent = sb.toString();
         while (true) {
             // this check is because I don't yet trust my data structure wiring
             b.integrityCheck();
@@ -49,12 +44,12 @@ public class QBSolver implements Solver {
             int[][] state = b.getBoard();
             SudokuChecker checker = new SudokuChecker(state);
             if (checker.completed()) {
-                __l.debug(indent+"Puzzle completed");
+                __l.debug("Puzzle completed");
                 if (checker.checkPuzzle()) {
-                    __l.debug(indent+"Puzzle solved with "+guessNumber+" guesses.");
+                    __l.debug("Puzzle solved with "+guessNumber+" guesses.");
                     return state;
                 }
-                __l.debug(indent+"Invalid solution");
+                __l.debug("Invalid solution");
                 // we've got a number in every square but it isn't a valid solution
                 throw new NoSolutionFoundException(state);
             }
@@ -144,13 +139,6 @@ public class QBSolver implements Solver {
     }
 
     private int[][] guess(Board b, int guessNumber) {
-        StringBuilder sb = new StringBuilder();
-        for (int i=0; i<guessNumber; i++) {
-            sb.append(" ");
-        }
-        String indent = sb.toString();
-
-        __l.debug(indent+"g: "+guessNumber);
         // for each available cell in b
         for (int row=0; row<9; row++) {
             for (int col=0; col<9; col++) {
@@ -162,11 +150,9 @@ public class QBSolver implements Solver {
                         try {
                             // duplicate the board
                             Board b2 = new Board(b);
-                            __l.debug(indent + "[" + row + ", " + col + "] = " + v + "?");
                             b2.getCell(row, col).setValue(v.intValue());
                             return solve(b2, guessNumber);
                         } catch (Exception e) {
-                            __l.debug(indent + "[" + c.getRow() + ", " + c.getCol() + "] != " + v);
                             // here's an experiment. If we know that assigning value v to cell c doesn't work, then
                             // let's make a copy of Board b and remove v from c-prime's list of possibilities.
                             try {
@@ -175,8 +161,7 @@ public class QBSolver implements Solver {
                                 cPrime.removePossibility(v.intValue());
                                 b = bPrime;
                             } catch (IllegalArgumentException iae) {
-                                // well, *that* is a bit of a surprise
-                                __l.warn("Exception removing demonstrated bad value", iae);
+                                // well, *that* is a bit of a surprise. Unless we're deep in guess territory and we've just found an impossible path
                             }
                         }
                     }
