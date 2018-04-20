@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.qbcps.sudoku.model.Cell;
+import com.qbcps.sudoku.model.CellGroup;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

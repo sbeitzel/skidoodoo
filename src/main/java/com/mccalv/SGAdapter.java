@@ -3,8 +3,8 @@ package com.mccalv;
  * Copyright 4/19/18 by Stephen Beitzel
  */
 
-import com.qbcps.sudoku.Difficulty;
-import com.qbcps.sudoku.Generator;
+import com.qbcps.sudoku.model.Difficulty;
+import com.qbcps.sudoku.model.Generator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

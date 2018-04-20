@@ -3,6 +3,7 @@ package com.qbcps.sudoku;
  * Copyright 4/19/18 by Stephen Beitzel
  */
 
+import com.qbcps.sudoku.model.Cell;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

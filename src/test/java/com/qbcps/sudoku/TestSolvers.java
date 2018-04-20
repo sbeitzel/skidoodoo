@@ -3,6 +3,13 @@ package com.qbcps.sudoku;
  * Copyright 4/18/18 by Stephen Beitzel
  */
 
+import com.qbcps.sudoku.model.Board;
+import com.qbcps.sudoku.model.Difficulty;
+import com.qbcps.sudoku.model.Generator;
+import com.qbcps.sudoku.model.NoSolutionFoundException;
+import com.qbcps.sudoku.model.QBSolver;
+import com.qbcps.sudoku.model.SKSolverAdapter;
+import com.qbcps.sudoku.model.Solver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
