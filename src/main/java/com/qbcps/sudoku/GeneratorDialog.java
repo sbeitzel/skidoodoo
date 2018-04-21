@@ -16,7 +16,7 @@ import com.mccalv.SGAdapter;
 import com.qbcps.sudoku.model.Board;
 import com.qbcps.sudoku.model.Difficulty;
 import com.qbcps.sudoku.model.Generator;
-import com.qbcps.sudoku.model.SKGeneratorAdapter;
+import com.rkoutnik.sudoku.SKGeneratorAdapter;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

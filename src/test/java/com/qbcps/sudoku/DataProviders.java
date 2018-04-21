@@ -6,8 +6,7 @@ package com.qbcps.sudoku;
 import com.mccalv.SGAdapter;
 import com.qbcps.sudoku.model.Board;
 import com.qbcps.sudoku.model.QBSolver;
-import com.qbcps.sudoku.model.SKGeneratorAdapter;
-import com.qbcps.sudoku.model.SKSolverAdapter;
+import com.rkoutnik.sudoku.SKGeneratorAdapter;
 import org.testng.annotations.DataProvider;
 
 /**
@@ -37,7 +36,6 @@ public class DataProviders {
     @DataProvider(name = "solvers")
     public static Object[][] getSolvers() {
         return new Object[][] {
-                {"rkoutnik", new SKSolverAdapter()},
                 {"QBSolver", new QBSolver()}
         };
     }

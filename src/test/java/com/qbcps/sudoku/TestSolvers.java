@@ -8,7 +8,6 @@ import com.qbcps.sudoku.model.Difficulty;
 import com.qbcps.sudoku.model.Generator;
 import com.qbcps.sudoku.model.NoSolutionFoundException;
 import com.qbcps.sudoku.model.QBSolver;
-import com.qbcps.sudoku.model.SKSolverAdapter;
 import com.qbcps.sudoku.model.Solver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -18,13 +17,6 @@ import org.testng.annotations.Test;
  */
 @Test(groups = {"all"})
 public class TestSolvers {
-
-    @Test(groups = {"rkoutnik"}, dataProvider = "generators", dataProviderClass = DataProviders.class, enabled = false)
-    public void testSKPerverse(String generatorName, Generator generator, String difficulty) {
-        Solver solver = new SKSolverAdapter();
-        System.out.println("testing rkoutnik solver against "+generatorName);
-        runPuzzles(generator, solver, Difficulty.fromString(difficulty));
-    }
 
     @Test(dataProvider = "generators", dataProviderClass = DataProviders.class)
     public void testQBSolver(String generatorName, Generator generator, String difficulty) {
@@ -36,12 +28,6 @@ public class TestSolvers {
     @Test(dataProvider = "boards", dataProviderClass = DataProviders.class)
     public void testQBFixed(String difficulty, Board b) {
         QBSolver solver = new QBSolver();
-        solver.getSolution(b.getBoard());
-    }
-
-    @Test(groups = {"rkoutnik"}, dataProvider = "boards", dataProviderClass = DataProviders.class, enabled = false)
-    public void testSKFixed(String difficulty, Board b) {
-        SKSolverAdapter solver = new SKSolverAdapter();
         solver.getSolution(b.getBoard());
     }
 

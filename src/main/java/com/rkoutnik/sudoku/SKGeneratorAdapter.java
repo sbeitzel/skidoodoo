@@ -1,9 +1,10 @@
-package com.qbcps.sudoku.model;
+package com.rkoutnik.sudoku;
 /*
  * Copyright 4/18/18 by Stephen Beitzel
  */
 
-import com.rkoutnik.sudoku.SudokuGenerator;
+import com.qbcps.sudoku.model.Difficulty;
+import com.qbcps.sudoku.model.Generator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
