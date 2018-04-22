@@ -9,6 +9,7 @@ import com.qbcps.sudoku.model.Generator;
 import com.qbcps.sudoku.model.NoSolutionFoundException;
 import com.qbcps.sudoku.model.QBSolver;
 import com.qbcps.sudoku.model.Solver;
+import com.rkoutnik.sudoku.SudokuChecker;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -18,22 +19,24 @@ import org.testng.annotations.Test;
 @Test(groups = {"all"})
 public class TestSolvers {
 
-    @Test(dataProvider = "generators", dataProviderClass = DataProviders.class)
-    public void testQBSolver(String generatorName, Generator generator, String difficulty) {
-        Solver solver = new QBSolver();
-        System.out.println("testing QBSolver against "+generatorName);
+    @Test(dataProvider = "solverMatrix", dataProviderClass = DataProviders.class)
+    public void testSolvers(String comboName, Generator generator, String difficulty, Solver solver) {
+        System.out.println("testing " + comboName);
         runPuzzles(generator, solver, Difficulty.fromString(difficulty));
     }
 
     @Test(dataProvider = "boards", dataProviderClass = DataProviders.class)
     public void testQBFixed(String difficulty, Board b) {
+        System.out.println(difficulty);
         QBSolver solver = new QBSolver();
         solver.getSolution(b.getBoard());
     }
 
     private void runPuzzles(Generator gen, Solver solver, Difficulty d) {
         try {
-            solver.getSolution(gen.generate(d));
+            int[][] solved = solver.getSolution(gen.generate(d));
+            SudokuChecker checker = new SudokuChecker(solved);
+            Assert.assertTrue(checker.completed() && checker.checkPuzzle(), "Solver didn't solve the puzzle!");
         } catch (NoSolutionFoundException nsfe) {
             Assert.fail("Unable to solve a puzzle of difficulty " + d);
         }

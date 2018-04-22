@@ -4,6 +4,7 @@ package com.qbcps.sudoku;
  */
 
 import com.mccalv.SGAdapter;
+import com.paulvaroutsos.sudokusolver.SATAdapter;
 import com.qbcps.sudoku.model.Board;
 import com.qbcps.sudoku.model.QBSolver;
 import com.rkoutnik.sudoku.SKGeneratorAdapter;
@@ -36,8 +37,30 @@ public class DataProviders {
     @DataProvider(name = "solvers")
     public static Object[][] getSolvers() {
         return new Object[][] {
-                {"QBSolver", new QBSolver()}
+                {"QBSolver", new QBSolver()},
+                {"satsolver", new SATAdapter()}
         };
+    }
+
+    @DataProvider(name = "solverMatrix")
+    public static Object[][] getSolverMatrix() {
+        Object[][] generators = getGenerators();
+        Object[][] solvers = getSolvers();
+        Object[][] solverMatrix = new Object[generators.length * solvers.length][];
+
+        int ix = 0;
+        for (Object[] generator : generators) {
+            for (Object[] solver : solvers) {
+                solverMatrix[ix++] = new Object[]{
+                        generator[0].toString() + "|" + generator[2] + "|" + solver[0], // name of the combo
+                        generator[1], // generator instance
+                        generator[2], // puzzle difficulty
+                        solver[1] // solver instance
+                };
+            }
+        }
+
+        return solverMatrix;
     }
 
     @DataProvider(name = "boards")

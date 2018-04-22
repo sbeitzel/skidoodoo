@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 public class TestFonts {
     private static final Logger __l = LoggerFactory.getLogger(TestFonts.class);
 
-    @Test
+    @Test(enabled = false)
     public void testFindFamilies() {
         __l.info("Font families on this system");
         for (String family : Font.getFamilies()) {
