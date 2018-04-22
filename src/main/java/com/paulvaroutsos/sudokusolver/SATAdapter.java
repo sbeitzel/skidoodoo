@@ -7,7 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
-import com.paulvaroutsos.satsolver.dpSolver;
+import com.paulvaroutsos.satsolver.DPSolver;
 import com.qbcps.sudoku.model.NoSolutionFoundException;
 import com.qbcps.sudoku.model.Solver;
 import org.slf4j.Logger;
@@ -46,7 +46,7 @@ public class SATAdapter implements Solver {
             Mapper m = new Mapper(sb);
             m.buildSudokuClauses();
             // sb now holds the lines declaring the rules of sudoku after all the puzzle lines
-            dpSolver dp = new dpSolver();
+            DPSolver dp = new DPSolver();
             int[] solution = dp.solve(sb);
             return UnMapper.unMap(solution);
         } catch (UnsupportedEncodingException e) {

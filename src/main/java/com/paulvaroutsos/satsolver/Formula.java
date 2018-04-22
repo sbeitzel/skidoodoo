@@ -6,7 +6,7 @@ import java.util.Stack;
 import java.util.TreeSet;
 
 /**
- * This class represents a boolean formula and supplements the dpSolver file.
+ * This class represents a boolean formula and supplements the DPSolver file.
  * Boolean formulas are stored in CNF form.
  *
  * A formula is empty if it has all of its clauses satisfied.
@@ -412,7 +412,7 @@ public class Formula {
 
     /**
      * Gets the highest unassigned rank variable in the formula. This is used by
-     * dpSolver to choose which variable to branch to.
+     * DPSolver to choose which variable to branch to.
      *
      * @return - The variable with the highest ranking variable.
      */

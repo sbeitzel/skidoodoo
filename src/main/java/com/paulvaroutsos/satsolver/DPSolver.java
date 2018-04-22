@@ -23,7 +23,7 @@ package com.paulvaroutsos.satsolver;
  * @author Dr. Baliga, Paul Varoutsos, Tom Devito
  *
  */
-public class dpSolver {
+public class DPSolver {
 
 private Formula formula;
 
