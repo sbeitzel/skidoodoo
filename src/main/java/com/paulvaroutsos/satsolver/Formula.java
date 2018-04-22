@@ -84,7 +84,7 @@ public class Formula {
      *
      * @param formulaString  - The formula as a StringBuffer (String)
      */
-    public Formula(StringBuffer formulaString) {
+    public Formula(StringBuilder formulaString) {
         LinkedList<Integer> originalFormula = new LinkedList<>();
         variablesAffected = new Stack<>();
         unitVariables = new TreeSet<>();

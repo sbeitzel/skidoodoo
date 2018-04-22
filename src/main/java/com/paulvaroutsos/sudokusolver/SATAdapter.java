@@ -39,7 +39,7 @@ public class SATAdapter implements Solver {
             String readyForMapper = transformPuzzle(puzzle);
             ByteArrayInputStream is = new ByteArrayInputStream(readyForMapper.getBytes("UTF-8"));
             InputStreamReader reader = new InputStreamReader(is);
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             SudokuReader sr = new SudokuReader(reader, sb);
             sr.extractClauses();
             // sb now holds all the lines stating the problem

@@ -14,14 +14,14 @@ public class SudokuReader {
     //This is the number of clauses that each sudoku puzzles all have in common
     private static int CLAUSE_COUNT = 11988;
     private Reader in;
-    private StringBuffer out;
+    private StringBuilder out;
 
     /**
      * Creates a SudokuReader object.
      * @param in - The input file to use that represents the sudoku puzzle
      * @param out - The output file to write to
      */
-    public SudokuReader(Reader in, StringBuffer out) {
+    public SudokuReader(Reader in, StringBuilder out) {
         this.in = in;
         this.out = out;
     }

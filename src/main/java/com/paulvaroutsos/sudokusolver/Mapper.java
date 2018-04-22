@@ -29,9 +29,9 @@ public class Mapper {
 
     private static final int NUM_VARS = 9;
     private static final int SQUARE_SIZE = 9;
-    private StringBuffer out;
+    private StringBuilder out;
 
-    public Mapper(StringBuffer out) {
+    public Mapper(StringBuilder out) {
         this.out = out;
     }
 
@@ -59,7 +59,6 @@ public class Mapper {
      * 211 V 221 V 231 V ... V 291
      */
     private void constraint_11A() {
-
         for (int k = 1; k <= NUM_VARS; k++) {
             for (int i = 1; i <= SQUARE_SIZE; i++) {
                 // Inner loop checks each box in that row
@@ -70,13 +69,12 @@ public class Mapper {
             }
         }
     }
+
     // CONSTRAINT 2.1.A
     // Checks that each number must occur at least once in the column
     // 111 V 211 V 311 V ... V 911
     // 121 V 221 V 321 V ... V 921
-
     private void constraint_21A() {
-
         for (int k = 1; k <= NUM_VARS; k++) {
             for (int i = 1; i <= SQUARE_SIZE; i++) {
                 for (int j = 1; j <= SQUARE_SIZE; j++) {
@@ -93,7 +91,6 @@ public class Mapper {
     // (-121 V -131) /\ (-121 V -141) /\ ... /\ (-121 V -191)
 
     private void constraint_11B() {
-
         for (int k = 1; k <= NUM_VARS; k++) {
             for (int n = 1; n <= SQUARE_SIZE; n++) {
                 for (int j = 1; j <= SQUARE_SIZE; j++) {
@@ -113,7 +110,6 @@ public class Mapper {
     // (-111 V -211) /\ (-111 V -311) /\ ... /\ (-111 V -911)
     // (-211 V -311 /\ (-211 V -411) /\ ... /\ (-211 V -911)
     private void constraint_21B() {
-
         for (int k = 1; k <= NUM_VARS; k++) {
             for (int n = 1; n <= SQUARE_SIZE; n++) {
                 for (int j = 1; j <= SQUARE_SIZE; j++) {
@@ -133,7 +129,6 @@ public class Mapper {
     // box
     // 111 V 121 V 131 V 211 V 221 V 231 V 311 V 321 V 331
     private void constraint_31A() {
-
         for (int k = 1; k <= NUM_VARS; k++) {
             for (int m = 1; m <= SQUARE_SIZE; m += 3) {
                 for (int n = 1; n <= SQUARE_SIZE; n += 3) {
@@ -156,8 +151,6 @@ public class Mapper {
     // this is a slow way of doing it, may need to look for an
     // alternative method
     private void constraint_31B() {
-
-
         for (int k = 1; k <= NUM_VARS; k++) {
             for (int m = 1; m <= SQUARE_SIZE; m += 3) {
                 for (int n = 1; n <= SQUARE_SIZE; n += 3) {
@@ -197,7 +190,6 @@ public class Mapper {
     //Check that each box has at least 1 variable
     //V111 V V112 V V113 V ... V V119
     private void constraint_41() {
-
         for (int i = 1; i <= SQUARE_SIZE; i++) {
             for (int j = 1; j <= SQUARE_SIZE; j++) {
                 for (int k = 1; k <= SQUARE_SIZE; k++) {

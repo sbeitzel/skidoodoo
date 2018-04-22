@@ -32,8 +32,7 @@ private Formula formula;
      *
      * @param formulaString - The formula to solve.
      */
-    private void readFormula(StringBuffer formulaString) {
-
+    private void readFormula(StringBuilder formulaString) {
             formula = new Formula(formulaString);
     }
 
@@ -44,7 +43,6 @@ private Formula formula;
      * 		 Returns false otherwise.
      */
     private boolean hasEmptyClause() {
-
         return formula.hasEmptyClause();
     }
 
@@ -122,7 +120,7 @@ private Formula formula;
      *
      * @param formulaString - The formula to solve.
      */
-    public int[] solve(StringBuffer formulaString) {
+    public int[] solve(StringBuilder formulaString) {
 
         readFormula(formulaString);
 
