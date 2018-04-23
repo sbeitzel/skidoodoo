@@ -1,3 +1,5 @@
+package com.rkoutnik.sudoku;
+
 /**
  *Given a sudoku board, check to see if it is legal
  *Original author-Robert Willhoft

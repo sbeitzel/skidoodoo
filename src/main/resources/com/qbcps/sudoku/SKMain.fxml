@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?><?import javafx.scene.control.MenuBar?><?import javafx.scene.control.MenuItem?><?import javafx.scene.control.ScrollPane?><?import javafx.scene.control.TextArea?><?import javafx.scene.input.KeyCodeCombination?><?import javafx.scene.layout.ColumnConstraints?><?import javafx.scene.layout.GridPane?><?import javafx.scene.layout.RowConstraints?>
+<GridPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/"
+    xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qbcps.sudoku.SKMain" stylesheets="/appstyles.css">
+    <MenuBar fx:id="_mBar" prefHeight="29.0" prefWidth="485.0" GridPane.columnSpan="2">
+        <Menu mnemonicParsing="false" text="File">
+            <MenuItem mnemonicParsing="false" onAction="#handleAbout" text="About" />
+            <MenuItem mnemonicParsing="false" onAction="#handleNewBoard" text="New Puzzle">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="N" control="UP" meta="DOWN" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#handleQuit" text="Quit">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="Q" control="UP" meta="DOWN" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
+        </Menu>
+    </MenuBar>
+    <ScrollPane fitToHeight="true" fitToWidth="true"  GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+        <TextArea fx:id="_boardDisplay"/>
+    </ScrollPane>
+   <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+   </rowConstraints>
+
+</GridPane>
