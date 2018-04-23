@@ -6,6 +6,7 @@ package com.qbcps.sudoku;
 import com.mccalv.SGAdapter;
 import com.paulvaroutsos.sudokusolver.SATAdapter;
 import com.qbcps.sudoku.model.Board;
+import com.qbcps.sudoku.model.QBGenerator;
 import com.qbcps.sudoku.model.QBSolver;
 import com.rkoutnik.sudoku.SKGeneratorAdapter;
 import org.testng.annotations.DataProvider;
@@ -31,6 +32,9 @@ public class DataProviders {
                 ,{"mccalv", new SGAdapter(), "EASY"}
                 ,{"mccalv", new SGAdapter(), "MEDIUM"}
                 ,{"mccalv", new SGAdapter(), "HARD"}
+                ,{"QBGenerator", new QBGenerator(), "EASY"}
+                ,{"QBGenerator", new QBGenerator(), "MEDIUM"}
+                ,{"QBGenerator", new QBGenerator(), "HARD"}
         };
     }
 

@@ -21,6 +21,11 @@ public class Board implements Iterable<Cell> {
     private CellGroup[] _colGroups;
     private CellGroup[] _squareGroups;
 
+    /**
+     * Create a sudoku board and set it to the values in the provided array.
+     *
+     * @param puzzle the starting puzzle
+     */
     public Board(int[][] puzzle) {
         initStructures();
         // now that we have all the cells created, we can populate them
@@ -31,6 +36,13 @@ public class Board implements Iterable<Cell> {
                 }
             }
         }
+    }
+
+    /**
+     * Create an empty board
+     */
+    public Board() {
+        initStructures();
     }
 
     @SuppressWarnings("CopyConstructorMissesField")

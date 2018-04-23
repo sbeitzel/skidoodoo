@@ -24,7 +24,9 @@ public class CellGroup implements CellChangeListener {
     @Override
     public void valueSet(Cell c, int v) {
         for (Cell c1 : _cells) {
-            c1.removePossibility(v);
+            if (!c.equals(c1)) {
+                c1.removePossibility(v);
+            }
         }
     }
 

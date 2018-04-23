@@ -37,14 +37,22 @@ public class Cell {
     }
 
     public void setValue(int v) {
-        if (_possibles.contains(Integer.valueOf(v))) {
-            value = v;
+        if (v == 0) {
+            value = 0;
             _possibles.clear();
-            for (CellChangeListener ccl : _listeners) {
-                ccl.valueSet(this, v);
+            for (int i=1; i<9; i++) {
+                _possibles.add(Integer.valueOf(i));
             }
         } else {
-            throw new IllegalArgumentException("The value " + v + " is not a possible value for this cell. Possible values are: " + _possibles);
+            if (_possibles.contains(Integer.valueOf(v))) {
+                value = v;
+                _possibles.clear();
+                for (CellChangeListener ccl : _listeners) {
+                    ccl.valueSet(this, v);
+                }
+            } else {
+                throw new IllegalArgumentException("The value " + v + " is not a possible value for this cell. Possible values are: " + _possibles);
+            }
         }
     }
 
